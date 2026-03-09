@@ -52,7 +52,7 @@ cert-manager:
       enabled: true
       args:
         - '--dns01-recursive-nameservers-only'
-        - --dns01-recursive-nameservers=ns-362.awsdns-45.com:53,ns-930.awsdns-52.net:53
+        - --dns01-recursive-nameservers=1.1.1.1:53,1.0.0.1:53
 
   issuer:
     - name: letsencrypt-prod
@@ -61,7 +61,7 @@ cert-manager:
       syncwave: 20
 
       acme:
-        email: tjungbau@redhat.com
+        email: michi0987@gmail.com
 
         solvers:
           - dns01:
