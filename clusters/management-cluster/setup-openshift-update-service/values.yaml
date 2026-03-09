@@ -7,7 +7,7 @@ helper-operator:
         name: openshift-update-service
         create: true
       subscription:
-        channel: *quay-version
+        channel: v1
         approval: Automatic
         operatorName: openshift-update-service
         source: redhat-operators

@@ -1,7 +1,7 @@
 apiVersion: v2
-name: setup-quay
+name: setup-openshift-update-service
 description: Setup Quay Registry
-version: 2.0.0
+version: 1.0.0
 dependencies:
   - name: tpl
     version: ~1.0.0
