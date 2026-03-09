@@ -220,7 +220,7 @@ applicationsets:
 
   # Install Base Operators
   enable-base-operators:
-    enabled: false
+    enabled: true
     description: "Install BASE Operators for later use. There is no Health Check in Place, be sure that the Operators have been deployed."
     labels:
       category: operators
