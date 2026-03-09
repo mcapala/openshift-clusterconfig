@@ -1,6 +1,6 @@
 helper-operator:
   operators:
-    quay-operator:
+    openshift-update-service:
       enabled: true
       syncwave: '0'
       namespace:
