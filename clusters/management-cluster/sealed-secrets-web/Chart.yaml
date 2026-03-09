@@ -1,0 +1,9 @@
+apiVersion: v2
+name: sealed-secrets-web
+description: Setup and configure the cert Manager operator
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/cert-manager
+version: 1.0.0
+dependencies:
+  - name: sealed-secrets-web
+    version: ~3.3.0
+    repository: https://charts.bakito.net

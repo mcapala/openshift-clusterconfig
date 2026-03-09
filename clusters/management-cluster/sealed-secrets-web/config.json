@@ -1,0 +1,5 @@
+{
+  "namespace": "sealed-secrets-web",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}
