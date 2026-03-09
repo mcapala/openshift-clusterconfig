@@ -65,17 +65,13 @@ cert-manager:
 
         solvers:
           - dns01:
-              route53:
-                accessKeyIDSecretRef:
-                  key: access-key-id
-                  name: prod-route53-credentials-secret
-                region: us-west-1
-                secretAccessKeySecretRef:
-                  key: secret-access-key
-                  name: prod-route53-credentials-secret
+              cloudflare:
+                apiTokenSecretRef:
+                  name: cloudflare-api-token-secret
+                  key: api-token
             selector:
               dnsZones:
-                - aws.ispworld.at
+                - mcapala.com
 
 #########################################################
 # CERT-Manager Approver Policy Deployment (extra chart)
