@@ -200,7 +200,6 @@ configure_argocd() {
     helm_cmd="$HELM_BIN template \
         --set 'gitopsinstances.openshift_gitops.enabled=true' \
         --set 'gitopsinstances.openshift_gitops.clusterAdmin=enabled' \
-        --verify \
         -f values-openshift-gitops.yaml \
         ${HELM_REPO_NAME}/openshift-gitops"
     
@@ -208,7 +207,6 @@ configure_argocd() {
     "$HELM_BIN" template \
         --set 'gitopsinstances.openshift_gitops.enabled=true' \
         --set 'gitopsinstances.openshift_gitops.clusterAdmin=enabled' \
-        --verify \
         -f values-openshift-gitops.yaml \
         "${HELM_REPO_NAME}/openshift-gitops" | oc replace -f -
 
@@ -328,7 +326,6 @@ deploy() {
             --set 'helper-operator.enabled=true' \
             --set 'helper-status-checker.enabled=true' \
             --set 'gitopsinstances.openshift_gitops.clusterAdmin=disabled' \
-            --verify \
             --force \
             -f values-openshift-gitops.yaml \
             ${HELM_REPO_NAME}/openshift-gitops"
@@ -338,7 +335,6 @@ deploy() {
             --set 'helper-operator.enabled=true' \
             --set 'helper-status-checker.enabled=true' \
             --set 'gitopsinstances.openshift_gitops.clusterAdmin=disabled' \
-            --verify \
             --force \
             -f values-openshift-gitops.yaml \
             "${HELM_REPO_NAME}/openshift-gitops" | oc create -f -

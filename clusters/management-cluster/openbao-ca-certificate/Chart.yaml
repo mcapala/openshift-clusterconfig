@@ -17,7 +17,7 @@ maintainers:
 sources:
   - https://github.com/tjungbauer/helm-charts
   - https://charts.stderr.at/
-  - https://github.com/tjungbauer/openshift-clusterconfig-gitops
+  - https://github.com/mcapala/openshift-clusterconfig
 keywords:
   - security
   - certificate

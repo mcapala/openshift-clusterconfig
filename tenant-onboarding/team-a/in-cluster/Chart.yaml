@@ -16,5 +16,5 @@ maintainers:
 sources:
   - https://github.com/tjungbauer/helm-charts
   - https://charts.stderr.at/
-  - https://github.com/tjungbauer/openshift-clusterconfig-gitops
-home: https://github.com/tjungbauer/openshift-clusterconfig-gitops/tree/main/tenants/team-a/in-cluster
+  - https://github.com/mcapala/openshift-clusterconfig
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/tenants/team-a/in-cluster

@@ -2,7 +2,7 @@
 
 global:
   # Namespace of application scoped GitOps instance, that is responsible to deploy workload onto the clusters
-  application_gitops_namespace: gitops-application
+  application_gitops_namespace: openshift-gitops
 
   # cluster environments. A list of clusters that are known in Argo CD
   # name and url must be equal to what is defined in Argo CD

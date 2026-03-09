@@ -2,7 +2,7 @@ apiVersion: v2
 name: setup-dev-spaces
 description: Deploy Dev Spaces Operator
 version: 1.0.1
-home: https://github.com/tjungbauer/openshift-clusterconfig-gitops/tree/main/clusters/management-cluster/setup-dev-spaces
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-dev-spaces
 dependencies:
   - name: tpl
     version: ~1.0.0
@@ -21,6 +21,6 @@ maintainers:
 sources:
   - https://github.com/tjungbauer/helm-charts
   - https://charts.stderr.at/
-  - https://github.com/tjungbauer/openshift-clusterconfig-gitops
+  - https://github.com/mcapala/openshift-clusterconfig
 keywords:
   - dev

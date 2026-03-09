@@ -50,7 +50,9 @@ gitopsinstances:
     # Enable default health checks.
     # This will create some default health checks I usually add.
     # * ClusterLogging, * Application (Argo CD), * Lokistack, * Subcription, * Central (ACS), InstallPlan
-    default_resourceHealthChecks: true  
+    default_resourceHealthChecks: true 
+  gitops_application:
+    enabled: false
 
 # Deploy openshift-gitops operator. This will be enabled via init_GitOps.sh script
 helper-operator:

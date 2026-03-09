@@ -40,9 +40,9 @@ This chart has the following dependencies:
 Source:
 * <https://github.com/tjungbauer/helm-charts>
 * <https://charts.stderr.at/>
-* <https://github.com/tjungbauer/openshift-clusterconfig-gitops>
+* <https://github.com/mcapala/openshift-clusterconfig>
 
-Source code: https://github.com/tjungbauer/openshift-clusterconfig-gitops/tree/main/clusters/management-cluster/setup-dev-spaces
+Source code: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-dev-spaces
 
 ## Example values files
 

@@ -3,7 +3,7 @@
 # setup-compliance-operator
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Linting](https://github.com/tjungbauer/openshift-clusterconfig-gitops/actions/workflows/linting.yml/badge.svg)](https://github.com/tjungbauer/openshift-clusterconfig-gitops/actions/workflows/linting.yml)
+[![Linting](https://github.com/mcapala/openshift-clusterconfig/actions/workflows/linting.yml/badge.svg)](https://github.com/mcapala/openshift-clusterconfig/actions/workflows/linting.yml)
 [![Release Charts](https://github.com/tjungbauer/helm-charts/actions/workflows/release.yml/badge.svg)](https://github.com/tjungbauer/helm-charts/actions/workflows/release.yml)
 
   ![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-informational?style=flat-square)
@@ -44,9 +44,9 @@ This chart has the following dependencies:
 Source:
 * <https://github.com/tjungbauer/helm-charts>
 * <https://charts.stderr.at/>
-* <https://github.com/tjungbauer/openshift-clusterconfig-gitops>
+* <https://github.com/mcapala/openshift-clusterconfig>
 
-Source code: https://github.com/tjungbauer/openshift-clusterconfig-gitops/tree/main/clusters/management-cluster/setup-compliance-operator
+Source code: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-compliance-operator
 
 ## Example values files
 

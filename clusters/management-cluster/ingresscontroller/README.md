@@ -13,7 +13,7 @@ This chart has the following dependencies:
 | Repository | Name | Version |
 |------------|------|---------|
 
-It is best used with a full GitOps approach such as Argo CD does. For example, https://github.com/tjungbauer/openshift-clusterconfig-gitops (see folder cluster/management-cluster/ingresscontroller)
+It is best used with a full GitOps approach such as Argo CD does. For example, https://github.com/mcapala/openshift-clusterconfig (see folder cluster/management-cluster/ingresscontroller)
 
 ## Maintainers
 
@@ -25,7 +25,7 @@ It is best used with a full GitOps approach such as Argo CD does. For example, h
 Source:
 * <https://github.com/tjungbauer/helm-charts>
 * <https://charts.stderr.at/>
-* <https://github.com/tjungbauer/openshift-clusterconfig-gitops>
+* <https://github.com/mcapala/openshift-clusterconfig>
 
 Source code: https://github.com/tjungbauer/helm-charts/tree/main/charts/generic-cluster-config
 
