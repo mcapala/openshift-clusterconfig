@@ -1,0 +1,17 @@
+helper-operator:
+  operators:
+    quay-operator:
+      enabled: true
+      syncwave: '0'
+      namespace:
+        name: openshift-update-service
+        create: true
+      subscription:
+        channel: *quay-version
+        approval: Automatic
+        operatorName: openshift-update-service
+        source: redhat-operators
+        sourceNamespace: openshift-marketplace
+      operatorgroup:
+        create: true
+        notownnamespace: true
