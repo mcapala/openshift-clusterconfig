@@ -165,8 +165,8 @@ sealed-secrets-web:
         drop:
           - ALL
       privileged: false
-      # runAsGroup: 1000
-      # runAsUser: 1001
+      runAsGroup: null
+      runAsUser: null
 
     # -- Default process arguments are used, while additional can be added too
     args:
