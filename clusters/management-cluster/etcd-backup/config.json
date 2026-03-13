@@ -1,4 +1,0 @@
-{
-  "namespace": "etcd-backup",
-  "environment": "in-cluster"
-}

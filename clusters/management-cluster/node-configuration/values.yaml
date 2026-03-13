@@ -1,6 +1,6 @@
 ---
 nodes:
-  - name: node1
+  - name: sno
     enabled: true
     ignore_argocd_labels: true
 
@@ -10,9 +10,3 @@ nodes:
     roles:
       infra: true
       worker: true
-
-    spec:
-      taints:
-      - effect: NoSchedule
-        key: infra
-        value: reserved
