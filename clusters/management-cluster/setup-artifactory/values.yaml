@@ -1,28 +1,29 @@
 artifactory-oss:
-  containerSecurityContext:
-    enabled: false
   artifactory:
-    podSecurityContext:
+    containerSecurityContext:
       enabled: false
-  postgresql:
-    primary:
+    artifactory:
       podSecurityContext:
         enabled: false
-      securityContext:
+    postgresql:
+      primary:
+        podSecurityContext:
+          enabled: false
+        securityContext:
+          enabled: false
+        containerSecurityContext:
+          enabled: false
+    nginx:
+      podSecurityContext:
+        enabled: false
+        runAsUser: null
+        runAsGroup: null
+        fsGroup: null
+      containerSecurityContext:
+        enabled: false
+
+    rtfs:  
+      podSecurityContext:
         enabled: false
       containerSecurityContext:
         enabled: false
-  nginx:
-    podSecurityContext:
-      enabled: false
-      runAsUser: null
-      runAsGroup: null
-      fsGroup: null
-    containerSecurityContext:
-      enabled: false
-
-  rtfs:  
-    podSecurityContext:
-      enabled: false
-    containerSecurityContext:
-      enabled: false
