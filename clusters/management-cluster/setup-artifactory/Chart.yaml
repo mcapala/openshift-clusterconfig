@@ -1,0 +1,9 @@
+apiVersion: v2
+name: setup-artifactory
+description: Setup and configure the cert Manager operator
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-artifactory
+version: 1.0.0
+dependencies:
+  - name: artifactory
+    version: 107.133.12
+    repository: https://charts.jfrog.io

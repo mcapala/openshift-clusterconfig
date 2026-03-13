@@ -1,0 +1,5 @@
+{
+  "namespace": "cluster-artifactory",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}

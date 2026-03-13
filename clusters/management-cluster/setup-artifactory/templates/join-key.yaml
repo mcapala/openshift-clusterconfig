@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  join-key: NGZlYzU3MDE3ZWE5ZmEyNTUwMWRkNzk1OWM5ZmRkNDg3ZjQwMjYxY2ZlYzhkNzlhNWQyZjIyZjA0ZjQ2ODAxMw==
+kind: Secret
+metadata:
+  name: my-joinkey-secret
+  namespace: cluster-artifactory

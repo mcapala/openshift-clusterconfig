@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  master-key: NzFiMzQzMTk4MTExZTE0MmFlOTE2ZjVlOWVhZDliMmRlNGM3ZDNjYTg3ZWE3MTNkMzc1OGY5NTY0ZDY3NDBmOQ==
+kind: Secret
+metadata:
+  name: my-masterkey-secret
+  namespace: cluster-artifactory
