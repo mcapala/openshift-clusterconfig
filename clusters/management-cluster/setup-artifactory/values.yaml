@@ -1,4 +1,4 @@
-artifactory:
+artifactory-oss:
   containerSecurityContext:
     enabled: false
   artifactory:
