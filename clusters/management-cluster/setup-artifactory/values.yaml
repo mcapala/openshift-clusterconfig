@@ -15,8 +15,12 @@ artifactory-oss:
   nginx:
     podSecurityContext:
       enabled: false
+      runAsUser: null
+      runAsGroup: null
+      fsGroup: null
     containerSecurityContext:
       enabled: false
+
   rtfs:  
     podSecurityContext:
       enabled: false
