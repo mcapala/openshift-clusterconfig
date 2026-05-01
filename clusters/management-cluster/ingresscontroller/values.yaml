@@ -11,7 +11,7 @@ ingresscontrollers:
 
     # -- Number of replicas for this IngressController
     # @default -- 2
-    replicas: 1
+    replicas: 2
 
     # -- The name of the secret that stores the certificate information for the IngressController
     # @default -- N/A
