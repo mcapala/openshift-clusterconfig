@@ -1,0 +1,5 @@
+{
+  "namespace": "openshift-ingress",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}

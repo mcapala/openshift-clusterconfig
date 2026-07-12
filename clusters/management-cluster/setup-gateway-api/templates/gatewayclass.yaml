@@ -1,0 +1,13 @@
+{{- with .Values.gatewayclass }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: {{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "0" | quote }}
+spec:
+  controllerName: {{ .controllerName }}
+{{- end }}
+{{- end }}

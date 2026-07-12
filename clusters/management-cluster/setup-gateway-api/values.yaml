@@ -1,0 +1,28 @@
+---
+gatewayclass:
+  enabled: true
+  name: openshift-default
+  # Controller name expected by the OpenShift ingress operator (Gateway API GA).
+  controllerName: openshift.io/gateway-controller/v1
+  syncwave: '0'
+
+gateway:
+  enabled: true
+  name: gateway
+  namespace: openshift-ingress
+  syncwave: '1'
+  listeners:
+    - name: https-bookinfo
+      hostname: bookinfo.mcapala.com
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: bookinfo-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              istio-discovery: enabled
