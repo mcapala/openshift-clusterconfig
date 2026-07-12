@@ -48,3 +48,5 @@ setup-kiali:
         enabled: true
       - name: openshift-ingress
         enabled: true
+      - name: bookinfo
+        enabled: true
