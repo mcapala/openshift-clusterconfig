@@ -66,6 +66,16 @@ setup-kiali:
               namespace: var-namespace
               workload: var-workload
 
+  # OpenShift Service Mesh Console plugin: mesh visibility in the web console.
+  ossmconsole:
+    enabled: true
+
+  # Kiali needs read access to the PersesDashboard CRs to resolve dashboard links
+  # (Perses runs with kubernetesAuth).
+  persesReader:
+    enabled: true
+    namespace: perses-dashboards
+
   monitoring:
     # Enable the openshift-ingress monitors when the Gateway API gateway (phase 2) exists.
     namespaces:
