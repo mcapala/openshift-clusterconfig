@@ -1,0 +1,19 @@
+{{- with .Values.traceswriter }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .clusterrole }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "3" | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .clusterrole }}
+subjects:
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:serviceaccounts
+{{- end }}
+{{- end }}

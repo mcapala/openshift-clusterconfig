@@ -3,7 +3,6 @@ tempo: &channel-tempo stable
 tempo-namespace: &tempo-namespace openshift-tempo-operator
 bucketname: &bucketname tempo-bucket
 tempo-secret: &tempo-secret-name tempo-s3
-storageclassname: &storageclassname tempo-bucket-storage-class
 tempostack-namespace: &tempostack-namespace tempostack
 
 tempo-tracing:
@@ -27,7 +26,7 @@ tempo-tracing:
         type: s3
         credentialMode: static
 
-    storageSize: 500Gi
+    storageSize: 50Gi
     replicationFactor: 1
     serviceAccount: tempo-simplest
 
@@ -36,14 +35,8 @@ tempo-tracing:
       enabled: true
 
       authentication:
-        - tenantName: 'tenantA'
-          tenantId: '1610b0c3-c509-4592-a256-a1871353dbfc'
-          permissions:
-            - write
-            - read
-
-        - tenantName: 'tenantB'
-          tenantId: '1610b0c3-c509-4592-a256-a1871353dbfd'
+        - tenantName: 'mesh'
+          tenantId: '1610b0c3-c509-4592-a256-a1871353dbfe'
           permissions:
             - write
             - read
@@ -72,6 +65,24 @@ tempo-tracing:
         component:
           replicas: 1
 
+# ObjectBucketClaim for the TempoStack S3 storage (local template).
+# Uses the default noobaa bucket class - no dedicated BackingStore/pv-pool.
+objectstorage:
+  enabled: true
+  syncwave: '2'
+  bucket:
+    name: *bucketname
+    namespace: *tempostack-namespace
+    storageclass: openshift-storage.noobaa.io
+    bucketclass: noobaa-default-bucket-class
+
+# ClusterRoleBinding allowing all ServiceAccounts (Envoy sidecars/istiod) to write
+# traces through the TempoStack gateway (tenant RBAC, mode openshift).
+# The ClusterRole simplest-traces-write is created by the tempo-tracing chart.
+traceswriter:
+  enabled: true
+  syncwave: '3'
+  clusterrole: simplest-traces-write
 
 ######################################
 # SUBCHART: helper-operator
@@ -112,124 +123,25 @@ helper-status-checker:
       serviceAccount:
         name: "status-checker-tempo"
 
-########################################
-# SUBCHART: helper-objectstore
-
-# A helper chart that simply creates another backingstore for logging.
-# This is a chart in a very early state, and not everything can be customized for now.
-# It will create the objects:
-#  - BackingStore
-#  - BackingClass
-#  - StorageClass
-
-# NOTE: Currently only PV type is supported
-########################################
-helper-objectstore:
-
-  # -- Enable objectstore configuration
-  # @default -- false
-  enabled: true
-
-  # -- Syncwave for Argo CD
-  # @default - 1
-  syncwave: 1
-
-  # -- Name of the BackingStore
-  backingstore_name: tempo-backingstore
-
-  # -- Size of the BackingStore that each volume shall have.
-  backingstore_size: 400Gi
-
-  # -- CPU Limit for the Noobaa Pod
-  # @default -- 500m
-  limits_cpu: 500m
-
-  # -- Memory Limit for the Noobaa Pod.
-  # @default -- 2Gi
-  limits_memory: 2Gi
-
-  pvPool:
-    # -- Number of volumes that shall be used
-    # @default -- 1
-    numOfVolumes: 1
-
-    # Type of BackingStore. Currently pv-pool is the only one supported by this Helm Chart.
-    # @default -- pv-pool
-    type: pv-pool
-
-  # -- The StorageClass the BackingStore is based on
-  baseStorageClass: gp3-csi
-
-  # -- Name of the StorageClass that shall be created for the bucket.
-  storageclass_name: *storageclassname
-
-  # Bucket that shall be created
-  bucket:
-    # -- Shall a new bucket be enabled?
-    # @default -- false
-    enabled: true
-
-    # -- Name of the bucket that shall be created
-    name: *bucketname
-
-    # -- Target Namespace for that bucket.
-    namespace: *tempostack-namespace
-
-    # -- Syncwave for bucketclaim creation. This should be done very early, but it depends on ODF.
-    # @default -- 2
-    syncwave: 2
-
-    # -- Name of the storageclass for our bucket
-    # @default -- openshift-storage.noobaa.io
-    storageclass: *storageclassname
-
-
 ##############################################
 # SUBCHART: helper-odf-bucket-secret
-# Creates a Secret that Tempo requires
-#
-# A Kubernetes Job is created, that reads the
-# data from the Secret and ConfigMap and
-# creates a new secret for Tempo.
+# Creates the Secret that Tempo requires from
+# the OBC Secret and ConfigMap.
 ##############################################
 helper-odf-bucket-secret:
-  # -- Enable Job to create a Secret for TempoStack.
-  # @default -- false
   enabled: true
-
-  # -- Syncwave for Argo CD.
-  # @default -- 3
   syncwave: 3
-
-  # -- Namespace where TempoStack is deployed and where the Secret shall be created.
   namespace: *tempostack-namespace
-
-  # -- Name of Secret that shall be created.
   secretname: *tempo-secret-name
 
-  # Bucket Configuration
   bucket:
-    # -- Name of the Bucket shall has been created.
     name: *bucketname
 
-  # -- Keys that shall be used to create the Secret.
   keys:
-    # -- Overwrite access_key_id key.
-    # @default -- access_key_id
     access_key_id: access_key_id
-    # -- Overwrite access_key_secret key.
-    # @default -- access_key_secret
     access_key_secret: access_key_secret
-    # -- Overwrite bucket key.
-    # @default -- bucket
     bucket: bucket
-    # -- Overwrite endpoint key.
-    # @default -- endpoint
     endpoint: endpoint
-    # -- Overwrite region key. Region is only set if set_region is true.
-    # @default -- region
     region: region
 
-  # -- Set region key.
-  # @default -- false
   set_region: false
