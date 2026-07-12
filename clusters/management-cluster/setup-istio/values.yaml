@@ -33,13 +33,17 @@ setup-istio:
               port: 4317
               service: otel-collector.istio-system.svc.cluster.local
 
-  # Mesh-wide Telemetry resource: export traces through the otel extensionProvider.
+  # Mesh-wide Telemetry resource: export traces through the otel extensionProvider
+  # and expose Envoy metrics to platform user-workload monitoring.
   telemetry:
     enabled: true
     tracing:
       - providers:
           - name: otel
         randomSamplingPercentage: 100
+    metrics:
+      - providers:
+          - name: prometheus
 
   # Certificate signing is delegated to cert-manager via the istio-csr agent.
   # The Issuer istio-ca (namespace istio-system) is created by the cert-manager app.
