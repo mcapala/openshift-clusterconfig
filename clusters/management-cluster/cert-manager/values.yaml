@@ -167,6 +167,18 @@ cert-manager:
           name: root-issuer
           kind: ClusterIssuer
 
+      # HTTPS listener certificate for the Gateway API gateway (bookinfo).
+      - name: bookinfo-tls
+        enabled: true
+        namespace: openshift-ingress
+        syncwave: '25'
+        secretName: bookinfo-tls
+        dnsNames:
+          - bookinfo.mcapala.com
+        issuerRef:
+          name: letsencrypt-prod
+          kind: ClusterIssuer
+
 #########################################################
 # CERT-Manager Approver Policy Deployment (extra chart)
 #########################################################
