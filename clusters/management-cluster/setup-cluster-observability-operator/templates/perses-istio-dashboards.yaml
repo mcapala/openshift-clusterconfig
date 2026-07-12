@@ -1,0 +1,10 @@
+{{/*
+Istio Perses dashboards vendored verbatim from perses/community-mixins
+(examples/dashboards/operator/istio, namespace adjusted). Loaded as raw files
+because the dashboard specs contain {{...}} PromQL legend placeholders that
+must not be interpreted by Helm.
+*/}}
+{{- range $path, $_ := .Files.Glob "dashboards/*.yaml" }}
+---
+{{ $.Files.Get $path }}
+{{- end }}
