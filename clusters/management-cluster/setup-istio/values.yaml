@@ -21,6 +21,24 @@ setup-istio:
       - matchLabels:
           istio-discovery: enabled
 
+    # Trace export: OTLP to the TempoStack gateway (tenant mesh). Sampling is
+    # configured via the Telemetry resource below.
+    values:
+      meshConfig:
+        extensionProviders:
+          - name: otel
+            opentelemetry:
+              port: 8090
+              service: tempo-simplest-gateway.tempostack.svc.cluster.local
+
+  # Mesh-wide Telemetry resource: export traces through the otel extensionProvider.
+  telemetry:
+    enabled: true
+    tracing:
+      - providers:
+          - name: otel
+        randomSamplingPercentage: 100
+
   # Certificate signing is delegated to cert-manager via the istio-csr agent.
   # The Issuer istio-ca (namespace istio-system) is created by the cert-manager app.
   istiocsr:

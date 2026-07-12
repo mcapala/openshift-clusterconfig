@@ -19,6 +19,18 @@ setup-kiali:
                 - istio-cni
                 - openshift-ingress
 
+    external_services:
+      # Distributed tracing: query the TempoStack gateway (tenant mesh) with the
+      # Kiali ServiceAccount token (openshift tenancy mode).
+      tracing:
+        enabled: true
+        provider: tempo
+        use_grpc: false
+        internal_url: https://tempo-simplest-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/mesh
+        auth:
+          type: bearer
+          use_kiali_token: true
+
   monitoring:
     # Enable the openshift-ingress monitors when the Gateway API gateway (phase 2) exists.
     namespaces:
