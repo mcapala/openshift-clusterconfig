@@ -18,6 +18,9 @@ setup-istio:
               - istio-cni
               - istio-csr
               - openshift-ingress
+              # tempostack must be discovered so istiod can resolve the Tempo
+              # gateway service for the otel tracing extensionProvider.
+              - tempostack
       - matchLabels:
           istio-discovery: enabled
 
