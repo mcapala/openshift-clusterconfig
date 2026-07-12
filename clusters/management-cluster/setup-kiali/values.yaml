@@ -32,21 +32,16 @@ setup-kiali:
           use_kiali_token: true
 
       # Perses dashboards deployed by the COO monitoring UIPlugin. With the COO,
-      # url_format "openshift" is required and external_url is the console URL
-      # without a path. internal_url points at the Perses service so Kiali's
-      # health/version check succeeds.
+      # url_format "openshift" is required, external_url is the console URL
+      # without a path and internal_url stays unset so Kiali skips the internal
+      # dashboard validation and builds console links client-side.
       perses:
         enabled: true
-        internal_url: https://perses.openshift-cluster-observability-operator.svc.cluster.local:8080
         external_url: https://console-openshift-console.apps.ocp.mcapala.com
         url_format: openshift
         # Perses project = namespace holding the PersesDashboard CRs
         # (setup-cluster-observability-operator vendors them there).
         project: perses-dashboards
-        # Perses runs with kubernetesAuth - queries need the Kiali SA token.
-        auth:
-          type: bearer
-          use_kiali_token: true
         dashboards:
           - name: "Istio Service Dashboard"
             variables:
@@ -63,6 +58,10 @@ setup-kiali:
           - name: "Istio Mesh Dashboard"
             variables:
               datasource: var-datasource
+              namespace: var-namespace
+              workload: var-workload
+          - name: "Istio Ztunnel Dashboard"
+            variables:
               namespace: var-namespace
               workload: var-workload
 
