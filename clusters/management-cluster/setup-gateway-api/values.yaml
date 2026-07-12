@@ -15,20 +15,14 @@ gateway:
   namespace: openshift-ingress
   syncwave: '1'
   listeners:
-    - name: https-bookinfo
-      hostname: bookinfo.mcapala.com
-      port: 443
-      protocol: HTTPS
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - name: bookinfo-tls
+    # Placeholder (a Gateway needs >=1 listener). Real listeners return here for
+    # non-mesh app testing or a scenario flip-back — see "Scenario toggles".
+    - name: placeholder-http
+      port: 80
+      protocol: HTTP
       allowedRoutes:
         namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              istio-discovery: enabled
+          from: Same
 
 # Mesh-owned gateway: provisioned by the MESH istiod (GatewayClass istio),
 # no second control plane, no cacerts bridge. Deployment/Service/ServiceAccount

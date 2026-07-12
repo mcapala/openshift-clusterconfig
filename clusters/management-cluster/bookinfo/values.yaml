@@ -11,9 +11,11 @@ httproute:
   name: bookinfo
   syncwave: '2'
   hostname: bookinfo.mcapala.com
+  # Gateway scenario toggle: mesh-owned (mesh-gateway/istio-ingress) vs
+  # ingress-operator (gateway/openshift-ingress) — see handbook "Scenario toggles".
   gateway:
-    name: gateway
-    namespace: openshift-ingress
+    name: mesh-gateway
+    namespace: istio-ingress
   backend:
     name: productpage
     port: 9080

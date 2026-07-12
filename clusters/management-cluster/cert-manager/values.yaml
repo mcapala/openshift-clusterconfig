@@ -147,9 +147,10 @@ cert-manager:
           kind: ClusterIssuer
 
       # Gateway API intermediate CA: secret `cacerts` in openshift-ingress is picked up
-      # by the ingress-operator managed istiod (Gateway API, phase 2).
+      # by the ingress-operator managed istiod. Only needed for the ingress-operator
+      # gateway scenario (gateway/openshift-ingress) — disabled while that scenario is idle.
       - name: gateway-ca
-        enabled: true
+        enabled: false
         namespace: openshift-ingress
         syncwave: '23'
         isCA: true
@@ -169,7 +170,7 @@ cert-manager:
 
       # HTTPS listener certificate for the Gateway API gateway (bookinfo).
       - name: bookinfo-tls
-        enabled: true
+        enabled: false
         namespace: openshift-ingress
         syncwave: '25'
         secretName: bookinfo-tls
