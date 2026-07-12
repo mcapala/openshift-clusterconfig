@@ -43,6 +43,10 @@ setup-kiali:
         # Perses project = namespace holding the PersesDashboard CRs
         # (setup-cluster-observability-operator vendors them there).
         project: perses-dashboards
+        # Perses runs with kubernetesAuth - queries need the Kiali SA token.
+        auth:
+          type: bearer
+          use_kiali_token: true
         dashboards:
           - name: "Istio Service Dashboard"
             variables:
