@@ -179,6 +179,20 @@ cert-manager:
           name: letsencrypt-prod
           kind: ClusterIssuer
 
+      # HTTPS listener certificate for the mesh-owned gateway (istio-ingress).
+      # Peer entry to the openshift-ingress one above — exactly one is enabled
+      # at a time (gateway scenario toggle).
+      - name: bookinfo-tls
+        enabled: true
+        namespace: istio-ingress
+        syncwave: '25'
+        secretName: bookinfo-tls
+        dnsNames:
+          - bookinfo.mcapala.com
+        issuerRef:
+          name: letsencrypt-prod
+          kind: ClusterIssuer
+
 #########################################################
 # CERT-Manager Approver Policy Deployment (extra chart)
 #########################################################

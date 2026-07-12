@@ -1,0 +1,28 @@
+{{- with .Values.meshGateway }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
+    openshift.io/description: "Mesh-owned Gateway API ingress (provisioned by the mesh istiod)"
+  labels:
+    istio-discovery: enabled
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "1" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    networking.istio.io/service-type: {{ .serviceType | default "LoadBalancer" }}
+spec:
+  gatewayClassName: {{ .gatewayClassName }}
+  listeners:
+    {{- toYaml .listeners | nindent 4 }}
+{{- end }}
+{{- end }}

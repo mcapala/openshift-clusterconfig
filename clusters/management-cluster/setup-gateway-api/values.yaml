@@ -1,4 +1,7 @@
 ---
+# Two gateway scenarios live side by side; flip which one serves bookinfo via the
+# `enabled` flags and listener lists below plus the toggle points listed in the
+# mesh handbook page "Scenario toggles" (operations/scenario-toggles).
 gatewayclass:
   enabled: true
   name: openshift-default
@@ -10,6 +13,32 @@ gateway:
   enabled: true
   name: gateway
   namespace: openshift-ingress
+  syncwave: '1'
+  listeners:
+    - name: https-bookinfo
+      hostname: bookinfo.mcapala.com
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: bookinfo-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              istio-discovery: enabled
+
+# Mesh-owned gateway: provisioned by the MESH istiod (GatewayClass istio),
+# no second control plane, no cacerts bridge. Deployment/Service/ServiceAccount
+# mesh-gateway-istio are auto-created in istio-ingress.
+meshGateway:
+  enabled: true
+  name: mesh-gateway
+  namespace: istio-ingress
+  gatewayClassName: istio
+  serviceType: LoadBalancer
   syncwave: '1'
   listeners:
     - name: https-bookinfo
