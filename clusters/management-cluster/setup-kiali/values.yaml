@@ -31,6 +31,14 @@ setup-kiali:
           type: bearer
           use_kiali_token: true
 
+      # Perses dashboards deployed by the COO monitoring UIPlugin. With the COO,
+      # url_format "openshift" is required, internal_url must stay unset (skips
+      # dashboard validation) and external_url is the console URL without a path.
+      perses:
+        enabled: true
+        external_url: https://console-openshift-console.apps.ocp.mcapala.com
+        url_format: openshift
+
   monitoring:
     # Enable the openshift-ingress monitors when the Gateway API gateway (phase 2) exists.
     namespaces:
