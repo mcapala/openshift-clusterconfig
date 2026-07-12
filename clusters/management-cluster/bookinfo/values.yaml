@@ -7,7 +7,7 @@ namespace:
 # HTTPRoute exposing productpage through the Gateway API gateway in openshift-ingress.
 # Enable once the gateway (setup-gateway-api) exists.
 httproute:
-  enabled: false
+  enabled: true
   name: bookinfo
   syncwave: '2'
   hostname: bookinfo.mcapala.com

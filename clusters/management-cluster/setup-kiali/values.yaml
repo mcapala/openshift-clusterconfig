@@ -47,4 +47,4 @@ setup-kiali:
       - name: istio-system
         enabled: true
       - name: openshift-ingress
-        enabled: false
+        enabled: true
