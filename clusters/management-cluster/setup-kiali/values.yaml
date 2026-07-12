@@ -40,6 +40,27 @@ setup-kiali:
         internal_url: https://perses.openshift-cluster-observability-operator.svc.cluster.local:8080
         external_url: https://console-openshift-console.apps.ocp.mcapala.com
         url_format: openshift
+        # Perses project = namespace holding the PersesDashboard CRs
+        # (setup-cluster-observability-operator vendors them there).
+        project: perses-dashboards
+        dashboards:
+          - name: "Istio Service Dashboard"
+            variables:
+              datasource: var-datasource
+              namespace: var-namespace
+              service: var-service
+              version: var-version
+          - name: "Istio Workload Dashboard"
+            variables:
+              datasource: var-datasource
+              namespace: var-namespace
+              version: var-version
+              workload: var-workload
+          - name: "Istio Mesh Dashboard"
+            variables:
+              datasource: var-datasource
+              namespace: var-namespace
+              workload: var-workload
 
   monitoring:
     # Enable the openshift-ingress monitors when the Gateway API gateway (phase 2) exists.
