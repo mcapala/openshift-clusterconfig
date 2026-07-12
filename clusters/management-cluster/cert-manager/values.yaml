@@ -73,6 +73,100 @@ cert-manager:
               dnsZones:
                 - mcapala.com
 
+    # --- Shared root CA hierarchy for service mesh + Gateway API ---
+    # Bootstrap self-signed ClusterIssuer, only used to create the root CA.
+    - name: selfsigned-root
+      type: ClusterIssuer
+      enabled: true
+      syncwave: 20
+
+      selfSigned: true
+
+    # Root issuer: signs the mesh and gateway intermediate CAs.
+    # PoC root; replace with a trusted CA for production.
+    - name: root-issuer
+      type: ClusterIssuer
+      enabled: true
+      syncwave: 22
+
+      ca:
+        secretName: root-ca-key-pair
+
+    # Mesh intermediate issuer, consumed by the istio-csr agent (IstioCSR CR in setup-istio).
+    - name: istio-ca
+      type: Issuer
+      namespace: istio-system
+      enabled: true
+      syncwave: 24
+
+      ca:
+        secretName: istio-ca
+
+  certificates:
+    enabled: true
+    certificate:
+      # Root CA. Secret must live in the cluster-resource namespace (cert-manager)
+      # so ClusterIssuer root-issuer can read it.
+      - name: root-ca
+        enabled: true
+        namespace: cert-manager
+        syncwave: '21'
+        isCA: true
+        secretName: root-ca-key-pair
+        commonName: root-ca
+        duration: 87600h
+        privateKey:
+          algorithm: ECDSA
+          size: 256
+        subject:
+          organizations:
+            - cluster.local
+            - cert-manager
+        issuerRef:
+          name: selfsigned-root
+          kind: ClusterIssuer
+
+      # Service mesh intermediate CA (used by istio-csr via Issuer istio-ca).
+      - name: istio-ca
+        enabled: true
+        namespace: istio-system
+        syncwave: '23'
+        isCA: true
+        secretName: istio-ca
+        commonName: istio-ca
+        duration: 87600h
+        privateKey:
+          algorithm: ECDSA
+          size: 256
+        subject:
+          organizations:
+            - cluster.local
+            - cert-manager
+        issuerRef:
+          name: root-issuer
+          kind: ClusterIssuer
+
+      # Gateway API intermediate CA: secret `cacerts` in openshift-ingress is picked up
+      # by the ingress-operator managed istiod (Gateway API, phase 2).
+      - name: gateway-ca
+        enabled: true
+        namespace: openshift-ingress
+        syncwave: '23'
+        isCA: true
+        secretName: cacerts
+        commonName: gateway-ca
+        duration: 87600h
+        privateKey:
+          algorithm: ECDSA
+          size: 256
+        subject:
+          organizations:
+            - cluster.local
+            - cert-manager
+        issuerRef:
+          name: root-issuer
+          kind: ClusterIssuer
+
 #########################################################
 # CERT-Manager Approver Policy Deployment (extra chart)
 #########################################################

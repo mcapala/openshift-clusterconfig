@@ -36,6 +36,9 @@ Session.vim
 **/charts
 Chart.lock
 
+# Local docs (specs, plans) - never committed
+/docs/
+
 .history
 
 *.tgz
@@ -44,3 +47,11 @@ scripts/example_htpasswd/users.htpasswd
 
 *.key
 *.crt
+
+# Vendored helm dependencies for local file:// charts (ArgoCD renders from these)
+!clusters/management-cluster/setup-istio/charts/
+!clusters/management-cluster/setup-istio/charts/*.tgz
+!clusters/management-cluster/setup-kiali/charts/
+!clusters/management-cluster/setup-kiali/charts/*.tgz
+!clusters/management-cluster/cert-manager/charts/
+!clusters/management-cluster/cert-manager/charts/*.tgz

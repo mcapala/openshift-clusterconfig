@@ -1,0 +1,9 @@
+apiVersion: v2
+name: setup-kiali
+description: Installs the Kiali operator and a Kiali instance integrated with OpenShift platform monitoring.
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-kiali
+version: 1.0.0
+dependencies:
+  - name: setup-kiali
+    version: ~1.0.0
+    repository: file://../../../../helm-charts/charts/setup-kiali

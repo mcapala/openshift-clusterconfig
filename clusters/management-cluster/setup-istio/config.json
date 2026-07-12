@@ -1,0 +1,5 @@
+{
+  "namespace": "istio-system",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}

@@ -1,0 +1,28 @@
+---
+# Cluster-specific topology is restated here explicitly (even where equal to
+# chart defaults) so the Kiali configuration is readable from this repo alone.
+setup-kiali:
+  kiali:
+    namespace: istio-system
+    deployment:
+      cluster_wide_access: true
+      view_only_mode: false
+      # Namespaces Kiali watches - mirrors the Istio discoverySelectors (setup-istio).
+      discovery_selectors:
+        - matchLabels:
+            istio-discovery: enabled
+        - matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: In
+              values:
+                - istio-system
+                - istio-cni
+                - openshift-ingress
+
+  monitoring:
+    # Enable the openshift-ingress monitors when the Gateway API gateway (phase 2) exists.
+    namespaces:
+      - name: istio-system
+        enabled: true
+      - name: openshift-ingress
+        enabled: false

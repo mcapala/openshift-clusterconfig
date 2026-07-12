@@ -1,0 +1,9 @@
+apiVersion: v2
+name: setup-istio
+description: Installs and configures OpenShift Service Mesh 3 (operator, IstioCNI, Istio control plane, istio-csr integration, mesh-wide mTLS).
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-istio
+version: 1.0.0
+dependencies:
+  - name: setup-istio
+    version: ~1.0.0
+    repository: file://../../../../helm-charts/charts/setup-istio

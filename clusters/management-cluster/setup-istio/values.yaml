@@ -1,0 +1,42 @@
+---
+# Cluster-specific topology is restated here explicitly (even where equal to
+# chart defaults) so the mesh configuration is readable from this repo alone.
+setup-istio:
+  istio:
+    # Pin the control plane version explicitly if needed, e.g. v1.26.4.
+    # Empty string = operator default.
+    version: ''
+
+    # Namespaces that are part of the mesh (items are ORed).
+    # Application namespaces join by being labeled istio-discovery=enabled.
+    discoverySelectors:
+      - matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - istio-system
+              - istio-cni
+              - istio-csr
+              - openshift-ingress
+      - matchLabels:
+          istio-discovery: enabled
+
+  # Certificate signing is delegated to cert-manager via the istio-csr agent.
+  # The Issuer istio-ca (namespace istio-system) is created by the cert-manager app.
+  istiocsr:
+    enabled: true
+    istioCSRConfig:
+      certManager:
+        issuerRef:
+          name: istio-ca
+          kind: Issuer
+          group: cert-manager.io
+      istiodTLSConfig:
+        trustDomain: cluster.local
+      istio:
+        namespace: istio-system
+
+  # Mesh-wide mTLS. STRICT is the PoC requirement.
+  peerauthentication:
+    mtls:
+      mode: STRICT
