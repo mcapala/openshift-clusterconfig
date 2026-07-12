@@ -26,7 +26,7 @@ setup-kiali:
         enabled: true
         provider: tempo
         use_grpc: false
-        internal_url: https://tempo-simplest-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/mesh
+        internal_url: https://tempo-simplest-gateway.tempostack.svc.cluster.local:8080/api/traces/v1/mesh/tempo
         auth:
           type: bearer
           use_kiali_token: true
