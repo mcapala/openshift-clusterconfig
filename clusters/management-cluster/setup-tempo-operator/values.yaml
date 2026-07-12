@@ -76,22 +76,6 @@ objectstorage:
     storageclass: openshift-storage.noobaa.io
     bucketclass: noobaa-default-bucket-class
 
-# OpenTelemetry Collector bridging the mesh to the multitenant TempoStack gateway.
-# Envoy sidecars cannot authenticate against the gateway themselves and the
-# distributor only accepts traffic from the gateway (operator NetworkPolicy),
-# so the collector receives plain OTLP from the mesh and forwards it with its
-# ServiceAccount token (tenant header + service-ca TLS).
-collector:
-  enabled: true
-  name: otel
-  namespace: *tempostack-namespace
-  syncwave: '4'
-  replicas: 1
-  tenant: mesh
-  gateway:
-    service: tempo-simplest-gateway.tempostack.svc.cluster.local
-    port: 8090
-
 # ClusterRoleBinding allowing all ServiceAccounts (Envoy sidecars/istiod) to write
 # traces through the TempoStack gateway (tenant RBAC, mode openshift).
 # The ClusterRole simplest-traces-write is created by the tempo-tracing chart.

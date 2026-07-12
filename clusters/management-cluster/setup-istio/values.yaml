@@ -18,22 +18,20 @@ setup-istio:
               - istio-cni
               - istio-csr
               - openshift-ingress
-              # tempostack must be discovered so istiod can resolve the Tempo
-              # gateway service for the otel tracing extensionProvider.
-              - tempostack
       - matchLabels:
           istio-discovery: enabled
 
-    # Trace export: OTLP to the OpenTelemetry Collector (setup-tempo-operator),
+    # Trace export: OTLP to the OpenTelemetry Collector (local template below),
     # which authenticates against the multitenant TempoStack gateway. Sampling
     # is configured via the Telemetry resource below.
     values:
       meshConfig:
+        enableTracing: true
         extensionProviders:
           - name: otel
             opentelemetry:
               port: 4317
-              service: otel-collector.tempostack.svc.cluster.local
+              service: otel-collector.istio-system.svc.cluster.local
 
   # Mesh-wide Telemetry resource: export traces through the otel extensionProvider.
   telemetry:
@@ -62,3 +60,19 @@ setup-istio:
   peerauthentication:
     mtls:
       mode: STRICT
+
+# OpenTelemetry Collector (local template) bridging the mesh to the multitenant
+# TempoStack gateway. Envoy sidecars cannot authenticate against the gateway
+# themselves and the distributor only accepts traffic from the gateway
+# (operator NetworkPolicy), so the collector receives plain OTLP from the mesh
+# and forwards it with its ServiceAccount token (tenant header + service-ca TLS).
+collector:
+  enabled: true
+  name: otel
+  namespace: istio-system
+  syncwave: '5'
+  replicas: 1
+  tenant: mesh
+  gateway:
+    service: tempo-simplest-gateway.tempostack.svc.cluster.local
+    port: 8090
