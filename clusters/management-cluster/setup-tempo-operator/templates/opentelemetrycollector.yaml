@@ -1,0 +1,44 @@
+{{- with .Values.collector }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "4" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  mode: deployment
+  replicas: {{ .replicas | default 1 }}
+  config:
+    extensions:
+      bearertokenauth:
+        filename: /var/run/secrets/kubernetes.io/serviceaccount/token
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+    exporters:
+      otlp:
+        endpoint: {{ .gateway.service }}:{{ .gateway.port }}
+        tls:
+          insecure: false
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        auth:
+          authenticator: bearertokenauth
+        headers:
+          X-Scope-OrgID: {{ .tenant | quote }}
+    service:
+      extensions:
+        - bearertokenauth
+      pipelines:
+        traces:
+          receivers:
+            - otlp
+          exporters:
+            - otlp
+{{- end }}
+{{- end }}

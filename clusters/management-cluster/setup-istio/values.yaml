@@ -24,15 +24,16 @@ setup-istio:
       - matchLabels:
           istio-discovery: enabled
 
-    # Trace export: OTLP to the TempoStack gateway (tenant mesh). Sampling is
-    # configured via the Telemetry resource below.
+    # Trace export: OTLP to the OpenTelemetry Collector (setup-tempo-operator),
+    # which authenticates against the multitenant TempoStack gateway. Sampling
+    # is configured via the Telemetry resource below.
     values:
       meshConfig:
         extensionProviders:
           - name: otel
             opentelemetry:
-              port: 8090
-              service: tempo-simplest-gateway.tempostack.svc.cluster.local
+              port: 4317
+              service: otel-collector.tempostack.svc.cluster.local
 
   # Mesh-wide Telemetry resource: export traces through the otel extensionProvider.
   telemetry:
