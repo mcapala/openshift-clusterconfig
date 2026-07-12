@@ -1,0 +1,5 @@
+{
+  "namespace": "bookinfo",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: bookinfo
+description: Istio bookinfo demo application (upstream manifests) joined to the service mesh.
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/bookinfo
+version: 1.0.0

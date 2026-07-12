@@ -1,0 +1,19 @@
+---
+namespace:
+  name: bookinfo
+  descr: "Istio bookinfo demo application"
+  syncwave: '0'
+
+# HTTPRoute exposing productpage through the Gateway API gateway in openshift-ingress.
+# Enable once the gateway (setup-gateway-api) exists.
+httproute:
+  enabled: false
+  name: bookinfo
+  syncwave: '2'
+  hostname: bookinfo.mcapala.com
+  gateway:
+    name: gateway
+    namespace: openshift-ingress
+  backend:
+    name: productpage
+    port: 9080
