@@ -1,0 +1,45 @@
+{{- with .Values.trafficManagement }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: reviews
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "3" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  hosts:
+    - reviews
+  http:
+    - route:
+        {{- range .reviews.weights }}
+        - destination:
+            host: reviews
+            subset: {{ .subset }}
+          weight: {{ .weight }}
+        {{- end }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: ratings
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "3" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  hosts:
+    - ratings
+  http:
+    - route:
+        - destination:
+            host: ratings
+      timeout: {{ .ratings.timeout }}
+      retries:
+        attempts: {{ .ratings.retries.attempts }}
+        perTryTimeout: {{ .ratings.retries.perTryTimeout }}
+        retryOn: {{ .ratings.retries.retryOn }}
+{{- end }}
+{{- end }}

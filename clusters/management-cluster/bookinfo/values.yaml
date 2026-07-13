@@ -19,3 +19,33 @@ httproute:
   backend:
     name: productpage
     port: 9080
+
+# Traffic management (DestinationRules + VirtualServices).
+trafficManagement:
+  enabled: true
+  syncwave: '3'
+  reviews:
+    # Canary: weighted split across subsets; edit weights to promote/rollback.
+    subsets:
+      - v1
+      - v2
+      - v3
+    weights:
+      - subset: v1
+        weight: 90
+      - subset: v3
+        weight: 10
+  ratings:
+    timeout: 2s
+    retries:
+      attempts: 3
+      perTryTimeout: 500ms
+      retryOn: 5xx,connect-failure
+    connectionPool:
+      http1MaxPendingRequests: 32
+      http2MaxRequests: 128
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 60s
+      maxEjectionPercent: 50

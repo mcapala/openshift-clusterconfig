@@ -1,0 +1,42 @@
+{{- with .Values.trafficManagement }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: reviews
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "3" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  host: reviews
+  subsets:
+    {{- range .reviews.subsets }}
+    - name: {{ . }}
+      labels:
+        version: {{ . }}
+    {{- end }}
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: ratings
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "3" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  host: ratings
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: {{ .ratings.connectionPool.http1MaxPendingRequests }}
+        http2MaxRequests: {{ .ratings.connectionPool.http2MaxRequests }}
+    outlierDetection:
+      consecutive5xxErrors: {{ .ratings.outlierDetection.consecutive5xxErrors }}
+      interval: {{ .ratings.outlierDetection.interval }}
+      baseEjectionTime: {{ .ratings.outlierDetection.baseEjectionTime }}
+      maxEjectionPercent: {{ .ratings.outlierDetection.maxEjectionPercent }}
+{{- end }}
+{{- end }}
