@@ -1,0 +1,46 @@
+{{- with .Values.authorizationPolicies }}
+{{- if eq (.enabled | toString) "true" }}
+---
+# Empty spec: no rule matches any request => everything in the namespace is
+# denied unless an ALLOW policy below matches.
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-all
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "4" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec: {}
+{{- $gw := .gatewayPrincipal }}
+{{- range .allows }}
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ $.Values.authorizationPolicies.syncwave | default "4" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    matchLabels:
+      app: {{ .to.app }}
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              {{- range .fromPrincipals }}
+              - {{ if eq . "gatewayPrincipal" }}{{ $gw }}{{ else }}{{ . }}{{ end }}
+              {{- end }}
+      to:
+        - operation:
+            methods:
+              {{- range .methods }}
+              - {{ . }}
+              {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

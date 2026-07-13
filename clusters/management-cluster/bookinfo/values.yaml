@@ -49,3 +49,43 @@ trafficManagement:
       interval: 30s
       baseEjectionTime: 60s
       maxEjectionPercent: 50
+
+# Authorization: default-deny + explicit allows per call path. Principals are
+# ServiceAccount-derived SPIFFE identities.
+authorizationPolicies:
+  enabled: true
+  syncwave: '4'
+  # Gateway scenario toggle: identity of the ingress gateway allowed to reach
+  # productpage. Mesh-owned: istio-ingress/mesh-gateway-istio. Ingress-operator
+  # scenario: openshift-ingress/gateway-... (see handbook "Scenario toggles").
+  gatewayPrincipal: ocp.mcapala.local/ns/istio-ingress/sa/mesh-gateway-istio
+  allows:
+    - name: allow-gateway-to-productpage
+      to:
+        app: productpage
+      fromPrincipals:
+        - gatewayPrincipal   # resolved to .gatewayPrincipal by the template
+      methods:
+        - GET
+        - POST               # productpage /login and /logout are POSTs
+    - name: allow-productpage-to-details
+      to:
+        app: details
+      fromPrincipals:
+        - ocp.mcapala.local/ns/bookinfo/sa/bookinfo-productpage
+      methods:
+        - GET
+    - name: allow-productpage-to-reviews
+      to:
+        app: reviews
+      fromPrincipals:
+        - ocp.mcapala.local/ns/bookinfo/sa/bookinfo-productpage
+      methods:
+        - GET
+    - name: allow-reviews-to-ratings
+      to:
+        app: ratings
+      fromPrincipals:
+        - ocp.mcapala.local/ns/bookinfo/sa/bookinfo-reviews
+      methods:
+        - GET
