@@ -27,6 +27,10 @@ setup-istio:
     values:
       meshConfig:
         enableTracing: true
+        # Sidecars may only reach destinations present in istiod's registry
+        # (mesh services + declared ServiceEntries). Everything else is refused.
+        outboundTrafficPolicy:
+          mode: REGISTRY_ONLY
         extensionProviders:
           - name: otel
             opentelemetry:
