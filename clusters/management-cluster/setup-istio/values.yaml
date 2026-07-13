@@ -26,6 +26,10 @@ setup-istio:
     # is configured via the Telemetry resource below.
     values:
       meshConfig:
+        # Mesh-specific SPIFFE trust domain, deliberately NOT under the cluster's
+        # real DNS zone: models a security-team sub CA scoped to mesh identities
+        # only, unusable for cluster DNS wildcard certificates.
+        trustDomain: ocp.mcapala.local
         enableTracing: true
         # Sidecars may only reach destinations present in istiod's registry
         # (mesh services + declared ServiceEntries). Everything else is refused.
@@ -60,7 +64,7 @@ setup-istio:
           kind: Issuer
           group: cert-manager.io
       istiodTLSConfig:
-        trustDomain: cluster.local
+        trustDomain: ocp.mcapala.local
       istio:
         namespace: istio-system
 

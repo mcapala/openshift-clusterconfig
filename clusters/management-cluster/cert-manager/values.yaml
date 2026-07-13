@@ -120,7 +120,7 @@ cert-manager:
           size: 256
         subject:
           organizations:
-            - cluster.local
+            - ocp.mcapala.local
             - cert-manager
         issuerRef:
           name: selfsigned-root
@@ -140,7 +140,7 @@ cert-manager:
           size: 256
         subject:
           organizations:
-            - cluster.local
+            - ocp.mcapala.local
             - cert-manager
         issuerRef:
           name: root-issuer
@@ -162,7 +162,7 @@ cert-manager:
           size: 256
         subject:
           organizations:
-            - cluster.local
+            - ocp.mcapala.local
             - cert-manager
         issuerRef:
           name: root-issuer
