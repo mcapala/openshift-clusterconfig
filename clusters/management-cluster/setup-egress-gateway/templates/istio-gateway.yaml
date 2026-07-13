@@ -1,0 +1,29 @@
+{{- with .Values.gateway }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+    - port:
+        number: 443
+        name: tls
+        protocol: TLS
+      hosts:
+        {{- range $.Values.externalHosts }}
+        {{- if eq (.enabled | toString) "true" }}
+        - {{ .host }}
+        {{- end }}
+        {{- end }}
+      tls:
+        mode: PASSTHROUGH
+{{- end }}
+{{- end }}

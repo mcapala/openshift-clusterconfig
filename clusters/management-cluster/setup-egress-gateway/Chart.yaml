@@ -1,0 +1,5 @@
+apiVersion: v2
+name: setup-egress-gateway
+description: Dedicated Istio egress gateway (istio-egress) with EgressIP and declared external hosts.
+home: https://github.com/mcapala/openshift-clusterconfig/tree/main/clusters/management-cluster/setup-egress-gateway
+version: 1.0.0

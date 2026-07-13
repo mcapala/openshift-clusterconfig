@@ -1,0 +1,52 @@
+{{- with .Values.gateway }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "1" | quote }}
+spec:
+  replicas: {{ .replicas | default 1 }}
+  selector:
+    matchLabels:
+      istio: egressgateway
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+      labels:
+        istio: egressgateway
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: istio-proxy
+          image: auto
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "1" | quote }}
+spec:
+  type: ClusterIP
+  selector:
+    istio: egressgateway
+  ports:
+    - name: tls
+      port: 443
+      targetPort: 8443
+{{- end }}
+{{- end }}

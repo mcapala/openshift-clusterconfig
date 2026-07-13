@@ -1,0 +1,30 @@
+---
+namespace:
+  name: istio-egress
+  descr: "Dedicated Istio egress gateway - single audited exit point for declared external hosts"
+  syncwave: '0'
+
+# Egress gateway = plain Deployment with the `gateway` injection template:
+# the pod carries only istio-proxy (image resolved by the injection webhook).
+gateway:
+  enabled: true
+  name: egress-gateway
+  replicas: 1
+  syncwave: '1'
+
+# Declared external destinations. Each entry renders a ServiceEntry, a server
+# host on the egress Istio Gateway, and a two-legged VirtualService
+# (sidecars -> egress gateway -> external host). TLS passthrough.
+externalHosts:
+  - name: httpbin-org
+    enabled: true
+    host: httpbin.org
+    port: 443
+
+# OVN EgressIP: all pods in istio-egress SNAT to this address. Requires at
+# least one node labeled k8s.ovn.org/egress-assignable.
+egressIP:
+  enabled: true
+  name: istio-egress
+  ips:
+    - 10.0.40.150

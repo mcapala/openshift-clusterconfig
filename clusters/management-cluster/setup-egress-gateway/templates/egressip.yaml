@@ -1,0 +1,19 @@
+{{- with .Values.egressIP }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: {{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+spec:
+  egressIPs:
+    {{- range .ips }}
+    - {{ . }}
+    {{- end }}
+  namespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ $.Values.namespace.name }}
+{{- end }}
+{{- end }}

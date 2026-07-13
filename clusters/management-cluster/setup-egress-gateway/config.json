@@ -1,0 +1,5 @@
+{
+  "namespace": "istio-egress",
+  "environment": "in-cluster",
+  "cluster": "in-cluster"
+}

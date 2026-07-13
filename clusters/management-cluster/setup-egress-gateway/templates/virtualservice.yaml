@@ -1,0 +1,44 @@
+{{- range .Values.externalHosts }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ .name }}-via-egress
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  hosts:
+    - {{ .host }}
+  gateways:
+    - mesh
+    - {{ $.Values.gateway.name }}
+  tls:
+    # Leg 1 — every sidecar rewrites the outbound call to target the egress gateway.
+    - match:
+        - gateways:
+            - mesh
+          port: {{ .port | default 443 }}
+          sniHosts:
+            - {{ .host }}
+      route:
+        - destination:
+            host: {{ $.Values.gateway.name }}.{{ $.Values.namespace.name }}.svc.cluster.local
+            port:
+              number: 443
+    # Leg 2 — the gateway forwards to the real destination.
+    - match:
+        - gateways:
+            - {{ $.Values.gateway.name }}
+          port: 443
+          sniHosts:
+            - {{ .host }}
+      route:
+        - destination:
+            host: {{ .host }}
+            port:
+              number: {{ .port | default 443 }}
+{{- end }}
+{{- end }}

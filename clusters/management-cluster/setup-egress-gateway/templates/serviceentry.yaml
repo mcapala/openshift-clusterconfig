@@ -1,0 +1,21 @@
+{{- range .Values.externalHosts }}
+{{- if eq (.enabled | toString) "true" }}
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  hosts:
+    - {{ .host }}
+  ports:
+    - number: {{ .port | default 443 }}
+      name: tls
+      protocol: TLS
+  resolution: DNS
+{{- end }}
+{{- end }}
