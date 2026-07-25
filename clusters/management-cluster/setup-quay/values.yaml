@@ -1,7 +1,7 @@
 ---
 quay_namespace: &namespace quay-enterprise
-quay_route: &publicroute quay-registry-quay-quay-enterprise.apps.ocp.aws.ispworld.at
-s3_hostname: &s3_hostname s3-openshift-storage.apps.ocp.aws.ispworld.at
+quay_route: &publicroute quay.apps.ocp.mcapala.com
+s3_hostname: &s3_hostname s3-openshift-storage.apps.ocp.mcapala.com
 storageclassname: &storageclassname quay-bucket-storage-class
 bucket: &bucketname quay-bucket
 quay-version: &quay-version stable-3.17
